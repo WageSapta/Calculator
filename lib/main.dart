@@ -1,7 +1,10 @@
-import 'package:calculator/color.dart';
-import 'package:calculator/core.dart';
+import 'package:calculator/calculus/provider/theme_provider.dart';
+import 'package:calculator/currency/controller/currency_provider.dart';
+import 'package:provider/provider.dart';
+import 'package:calculator/utils/state_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'calculus/provider/calculus_provider.dart';
+import 'calculus/view/calculus_view.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,15 +15,23 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Calculator',
-      navigatorKey: Get.navigatorKey,
-      theme: ThemeData(
-        fontFamily: GoogleFonts.montserrat().fontFamily,
-        scaffoldBackgroundColor: MyColors.primaryColor,
-        useMaterial3: true,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        ChangeNotifierProvider(create: (_) => CalculusProvider()),
+        ChangeNotifierProvider(create: (_) => CurrencyProvider()),
+      ],
+      child: Consumer<ThemeProvider>(
+        builder: (context, value, child) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'Calculator',
+            navigatorKey: Get.navigatorKey,
+            theme: value.currentTheme,
+            home: const CalculusView(),
+          );
+        },
       ),
-      home: const CalculusView(),
     );
   }
 }

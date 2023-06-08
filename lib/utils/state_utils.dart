@@ -1,4 +1,6 @@
+import 'package:calculator/utils/color.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class Get {
   static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -41,3 +43,16 @@ extension ChangeNotifierExtension on State {
 }
 
 class MvcController {}
+
+class MyTheme {
+  static ThemeData lightTheme = ThemeData(
+    brightness: Brightness.light,
+    fontFamily: GoogleFonts.poppins().fontFamily,
+    scaffoldBackgroundColor: MyColors.primary,
+  );
+  static ThemeData darkTheme = ThemeData(
+    brightness: Brightness.dark,
+    fontFamily: GoogleFonts.poppins().fontFamily,
+    scaffoldBackgroundColor: Colors.grey[900],
+  );
+}
