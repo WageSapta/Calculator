@@ -1,3 +1,4 @@
+import 'package:calculator/calculus/widget/text_input.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -6,6 +7,7 @@ import '../../utils/state_utils.dart';
 import '../provider/calculus_provider.dart';
 import '../provider/theme_provider.dart';
 import '../widget/mybutton.dart';
+import '../widget/text_result.dart';
 
 class CalculusView extends StatefulWidget {
   const CalculusView({super.key});
@@ -25,7 +27,7 @@ class _CalculusViewState extends State<CalculusView> {
             Expanded(
               child: Container(
                 width: Get.width,
-                padding: const EdgeInsets.all(20.0),
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 margin:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 decoration: BoxDecoration(
@@ -50,50 +52,73 @@ class _CalculusViewState extends State<CalculusView> {
                         offset: const Offset(-4, -4),
                       ),
                     ]),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    FittedBox(
-                      fit: BoxFit.scaleDown,
-                      child: Text(
-                        calculus.input == "0" && calculus.input.length == 1
-                            ? " "
-                            : calculus.input,
-                        maxLines: 2,
-                        style: TextStyle(
-                          color: theme.isDarkMode
-                              ? calculus.isTyping
-                                  ? Colors.white
-                                  : Colors.white38
-                              : calculus.isTyping
-                                  ? Colors.black
-                                  : Colors.black38,
-                          fontSize: calculus.isTyping ? 50 : 40,
-                        ),
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    return SingleChildScrollView(
+                      reverse: true,
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            width: constraints.maxWidth,
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                mainAxisSize: MainAxisSize.min,
+                                children: calculus.history.map(
+                                  (e) {
+                                    return Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: [
+                                        Text(
+                                          e['input'],
+                                          style: TextStyle(
+                                            fontSize: 25,
+                                            color: theme.isDarkMode
+                                                ? Colors.white38
+                                                : Colors.black38,
+                                          ),
+                                        ),
+                                        Text(
+                                          "= ${e['result']}",
+                                          style: TextStyle(
+                                            fontSize: 25,
+                                            color: theme.isDarkMode
+                                                ? Colors.white38
+                                                : Colors.black38,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 15),
+                                      ],
+                                    );
+                                  },
+                                ).toList()),
+                          ),
+                          SizedBox(
+                            width: constraints.maxWidth,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Visibility(
+                                  visible: calculus.history.isNotEmpty,
+                                  child: const Divider(
+                                    height: 0,
+                                  ),
+                                ),
+                                Visibility(
+                                  visible: calculus.isTyping ||
+                                      calculus.input != "0",
+                                  child: const TextInput(),
+                                ),
+                                const TextResult()
+                              ],
+                            ),
+                          )
+                        ],
                       ),
-                    ),
-                    FittedBox(
-                      fit: BoxFit.scaleDown,
-                      child: Text(
-                        calculus.result != "0"
-                            ? "=${calculus.result}"
-                            : calculus.result,
-                        maxLines: 1,
-                        style: TextStyle(
-                          color: theme.isDarkMode
-                              ? calculus.isTyping
-                                  ? Colors.white38
-                                  : Colors.white
-                              : calculus.isTyping
-                                  ? Colors.black38
-                                  : Colors.black,
-                          fontSize: calculus.isTyping ? 40 : 50,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ],
+                    );
+                  },
                 ),
               ),
             ),
@@ -116,8 +141,18 @@ class _CalculusViewState extends State<CalculusView> {
                       theme: theme,
                       index: index,
                       fontSize: Get.width * 0.06,
-                      buttonText: calculus.buttons[index],
-                      onTap: () => calculus.clear(),
+                      buttonText:
+                          calculus.input == "0" && calculus.history.isNotEmpty
+                              ? "AC"
+                              : calculus.buttons[index],
+                      onTap: () {
+                        if (calculus.input == "0" &&
+                            calculus.history.isNotEmpty) {
+                          calculus.clearHistory();
+                          calculus.isResult = false;
+                        }
+                        calculus.clear();
+                      },
                     );
                   // delete
                   case 'del':
@@ -126,7 +161,12 @@ class _CalculusViewState extends State<CalculusView> {
                       index: index,
                       fontSize: Get.width * 0.06,
                       buttonText: calculus.buttons[index],
-                      onTap: () => calculus.delete(),
+                      onTap: () {
+                        if (!calculus.isResult) {
+                          calculus.delete();
+                        }
+                        calculus.equal();
+                      },
                     );
                   // result
                   case '=':
@@ -140,15 +180,29 @@ class _CalculusViewState extends State<CalculusView> {
                       index: index,
                       fontSize: Get.width * 0.06,
                       buttonText: calculus.buttons[index],
-                      onTap: () => calculus.equal(),
+                      onTap: () {
+                        calculus.isTyping = false;
+                        // calculus.equal();
+                        calculus.isResult = true;
+                        calculus.saveHistory();
+                      },
                     );
                   default:
+                    // number and operator
                     return MyButton(
                       theme: theme,
                       index: index,
                       fontSize: Get.width * 0.06,
                       buttonText: calculus.buttons[index],
-                      onTap: () => calculus.input = calculus.buttons[index],
+                      onTap: () {
+                        if (calculus.isResult) {
+                          calculus.getHistory();
+                          calculus.clear();
+                          calculus.isResult = false;
+                        }
+                        calculus.input = calculus.buttons[index];
+                        calculus.equal();
+                      },
                     );
                 }
               },

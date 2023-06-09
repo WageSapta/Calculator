@@ -7,7 +7,7 @@ class CircularTabBar extends StatelessWidget {
   final int currentIndex;
   final Function(int) onTabSelected;
 
-  CircularTabBar({
+  const CircularTabBar({super.key, 
     required this.tabs,
     required this.currentIndex,
     required this.onTabSelected,
@@ -53,8 +53,8 @@ class CircularTabBar extends StatelessWidget {
   Widget _buildTabButton(int index) {
     return Material(
       elevation: 4,
-      shape: CircleBorder(),
-      child: Container(
+      shape: const CircleBorder(),
+      child: SizedBox(
         width: 56,
         height: 56,
         child: tabs[index],
