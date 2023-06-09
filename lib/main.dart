@@ -1,10 +1,11 @@
+import 'package:calculator/apps/provider/apps_provider.dart';
 import 'package:calculator/calculus/provider/theme_provider.dart';
-import 'package:calculator/currency/controller/currency_provider.dart';
+import 'package:calculator/nav/provider/navigation_provider.dart';
+import 'package:calculator/splash_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:calculator/utils/state_utils.dart';
 import 'package:flutter/material.dart';
 import 'calculus/provider/calculus_provider.dart';
-import 'calculus/view/calculus_view.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,21 +18,35 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => NavigationProvider()),
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => CalculusProvider()),
-        ChangeNotifierProvider(create: (_) => CurrencyProvider()),
+        ChangeNotifierProvider(create: (_) => AppsProvider()),
       ],
       child: Consumer<ThemeProvider>(
         builder: (context, value, child) {
           return MaterialApp(
+            scrollBehavior: MyBehavior(), //
             debugShowCheckedModeBanner: false,
             title: 'Calculator',
             navigatorKey: Get.navigatorKey,
             theme: value.currentTheme,
-            home: const CalculusView(),
+            home: const SplashScreen(),
           );
         },
       ),
     );
+  }
+}
+
+class MyBehavior extends ScrollBehavior {
+  @override
+  Widget buildOverscrollIndicator(BuildContext context, Widget child,ScrollableDetails details) {
+    return child;
+  }
+
+  @override
+  Color? getScrollColor(BuildContext context) {
+    return null;
   }
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../apps/view/apps_view.dart';
 import '../../utils/color.dart';
 import '../../utils/state_utils.dart';
 import '../provider/calculus_provider.dart';
@@ -18,43 +17,15 @@ class CalculusView extends StatefulWidget {
 class _CalculusViewState extends State<CalculusView> {
   @override
   Widget build(BuildContext context) {
-    var provider = context.watch<CalculusProvider>();
-    var theme = context.watch<ThemeProvider>();
-    return SafeArea(
-      child: Scaffold(
-        body: Column(
+    return Consumer2<ThemeProvider, CalculusProvider>(
+      builder: (context, theme, calculus, child) {
+        return Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 15,
-                horizontal: 20,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  MyButton(
-                    isIcon: true,
-                    padding: EdgeInsets.all(Get.width * 0.05),
-                    iconSize: Get.width * 0.07,
-                    onTap: () => theme.toggleTheme(),
-                    icon: theme.isDarkMode ? Icons.light_mode : Icons.dark_mode,
-                  ),
-                  MyButton(
-                    isIcon: true,
-                    padding: EdgeInsets.all(Get.width * 0.05),
-                    iconSize: Get.width * 0.07,
-                    onTap: () => Get.to(const AppsView()),
-                    icon: Icons.apps_rounded,
-                  )
-                ],
-              ),
-            ),
-            Flexible(
+            Expanded(
               child: Container(
                 width: Get.width,
-                padding: const EdgeInsets.all(15.0),
-                // alignment: Alignment.bottomRight,
+                padding: const EdgeInsets.all(20.0),
                 margin:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 decoration: BoxDecoration(
@@ -66,16 +37,16 @@ class _CalculusViewState extends State<CalculusView> {
                         color: theme.isDarkMode
                             ? Colors.black
                             : Colors.grey.shade500,
-                        blurRadius: 15,
-                        spreadRadius: 1,
-                        offset: const Offset(4, 4),
+                        blurRadius: 10,
+                        spreadRadius: 0,
+                        offset: const Offset(5, 5),
                       ),
                       BoxShadow(
                         color: theme.isDarkMode
                             ? Colors.grey.shade800
-                            : Colors.white,
-                        blurRadius: 15,
-                        spreadRadius: 1,
+                            : MyColors.primary,
+                        blurRadius: 10,
+                        spreadRadius: 0,
                         offset: const Offset(-4, -4),
                       ),
                     ]),
@@ -86,36 +57,40 @@ class _CalculusViewState extends State<CalculusView> {
                     FittedBox(
                       fit: BoxFit.scaleDown,
                       child: Text(
-                        provider.input == "0" && provider.input.length == 1
+                        calculus.input == "0" && calculus.input.length == 1
                             ? " "
-                            : provider.input,
+                            : calculus.input,
                         maxLines: 2,
                         style: TextStyle(
                           color: theme.isDarkMode
-                              ? provider.isTyping
+                              ? calculus.isTyping
                                   ? Colors.white
                                   : Colors.white38
-                              : provider.isTyping
+                              : calculus.isTyping
                                   ? Colors.black
                                   : Colors.black38,
-                          fontSize: provider.isTyping ? 40 : 20,
+                          fontSize: calculus.isTyping ? 50 : 40,
                         ),
                       ),
                     ),
-                    Text(
-                      provider.result != "0"
-                          ? "=${provider.result}"
-                          : provider.result,
-                      style: TextStyle(
-                        color: theme.isDarkMode
-                            ? provider.isTyping
-                                ? Colors.white38
-                                : Colors.white
-                            : provider.isTyping
-                                ? Colors.black38
-                                : Colors.black,
-                        fontSize: provider.isTyping ? 30 : 40,
-                        fontWeight: FontWeight.bold,
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        calculus.result != "0"
+                            ? "=${calculus.result}"
+                            : calculus.result,
+                        maxLines: 1,
+                        style: TextStyle(
+                          color: theme.isDarkMode
+                              ? calculus.isTyping
+                                  ? Colors.white38
+                                  : Colors.white
+                              : calculus.isTyping
+                                  ? Colors.black38
+                                  : Colors.black,
+                          fontSize: calculus.isTyping ? 40 : 50,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ],
@@ -124,7 +99,7 @@ class _CalculusViewState extends State<CalculusView> {
             ),
             GridView.builder(
               shrinkWrap: true,
-              itemCount: provider.buttons.length,
+              itemCount: calculus.buttons.length,
               padding: const EdgeInsets.all(20.0),
               physics: const NeverScrollableScrollPhysics(),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -134,26 +109,29 @@ class _CalculusViewState extends State<CalculusView> {
                 mainAxisSpacing: 15,
               ),
               itemBuilder: (BuildContext context, int index) {
-                switch (provider.buttons[index]) {
+                switch (calculus.buttons[index]) {
                   // clear
                   case 'C':
                     return MyButton(
+                      theme: theme,
                       index: index,
                       fontSize: Get.width * 0.06,
-                      buttonText: provider.buttons[index],
-                      onTap: () => provider.clear(),
+                      buttonText: calculus.buttons[index],
+                      onTap: () => calculus.clear(),
                     );
                   // delete
                   case 'del':
                     return MyButton(
+                      theme: theme,
                       index: index,
                       fontSize: Get.width * 0.06,
-                      buttonText: provider.buttons[index],
-                      onTap: () => provider.delete(),
+                      buttonText: calculus.buttons[index],
+                      onTap: () => calculus.delete(),
                     );
                   // result
                   case '=':
                     return MyButton(
+                      theme: theme,
                       bg: theme.isDarkMode
                           ? MyColors.primary
                           : Colors.grey[900],
@@ -161,22 +139,23 @@ class _CalculusViewState extends State<CalculusView> {
                           theme.isDarkMode ? Colors.black : MyColors.primary,
                       index: index,
                       fontSize: Get.width * 0.06,
-                      buttonText: provider.buttons[index],
-                      onTap: () => provider.equal(),
+                      buttonText: calculus.buttons[index],
+                      onTap: () => calculus.equal(),
                     );
                   default:
                     return MyButton(
+                      theme: theme,
                       index: index,
                       fontSize: Get.width * 0.06,
-                      buttonText: provider.buttons[index],
-                      onTap: () => provider.input = provider.buttons[index],
+                      buttonText: calculus.buttons[index],
+                      onTap: () => calculus.input = calculus.buttons[index],
                     );
                 }
               },
             ),
           ],
-        ),
-      ),
+        );
+      },
     );
   }
 }

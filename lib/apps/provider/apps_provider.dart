@@ -1,3 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-class CalculusProvider extends ChangeNotifier {}
+class AppsProvider extends ChangeNotifier {
+  final List apps = [
+    {'name': "Area", 'icon': Icons.open_in_full},
+    {'name': "Bmi", 'icon': Icons.monitor_weight_outlined},
+    {'name': "Diskon", 'icon': Icons.discount_outlined},
+    {'name': "Kecepatan", 'icon': Icons.speed},
+    {'name': "Massa", 'icon': MdiIcons.weight},
+    {'name': "Mata uang", 'icon': Icons.currency_exchange},
+    {'name': "Panjang", 'icon': Icons.straighten},
+    {'name': "Suhu", 'icon': Icons.thermostat},
+    {'name': "Volume", 'icon': MdiIcons.cubeOutline},
+    {'name': "Waktu", 'icon': Icons.schedule},
+  ];
+}

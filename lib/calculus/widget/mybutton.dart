@@ -1,9 +1,9 @@
 import '../provider/theme_provider.dart';
 import 'package:flutter/material.dart';
 import '../../utils/color.dart';
-import 'package:provider/provider.dart';
 
 class MyButton extends StatefulWidget {
+  final ThemeProvider? theme;
   final String buttonText;
   final Function()? onTap;
   final int? index;
@@ -16,6 +16,7 @@ class MyButton extends StatefulWidget {
   final bool isButton;
   final Color? textColor;
   final Color? bg;
+  final bool isFlat;
 
   //Constructor
   const MyButton({
@@ -32,6 +33,8 @@ class MyButton extends StatefulWidget {
     this.margin,
     this.bg,
     this.textColor,
+    this.isFlat = false,
+    this.theme,
   }) : super(key: key);
 
   @override
@@ -62,56 +65,61 @@ class _MyButtonState extends State<MyButton> {
 
   Color getColor(theme) {
     Color? bg;
-    if (theme.isDarkMode) {
-      if (widget.bg != null) {
-        bg = widget.bg!;
+    setState(() {
+      if (theme.isDarkMode) {
+        if (widget.bg != null) {
+          bg = widget.bg!;
+        } else {
+          bg = Colors.grey[900]!;
+        }
       } else {
-        bg = Colors.grey[900]!;
+        if (widget.bg != null) {
+          bg = widget.bg!;
+        } else {
+          bg = MyColors.primary;
+        }
       }
-    } else {
-      if (widget.bg != null) {
-        bg = widget.bg!;
-      } else {
-        bg = MyColors.primary;
-      }
-    }
-    setState(() {});
-    return bg;
+    });
+    return bg!;
   }
 
   @override
   Widget build(BuildContext context) {
-    var theme = context.watch<ThemeProvider>();
     return GestureDetector(
       onTap: widget.onTap,
-      onTapDown: (_) => _handlePress(widget.index),
+      onLongPressDown: (_) => _handlePress(widget.index),
       onTapCancel: () => _handleRelease(widget.index),
       onTapUp: (_) => _handleRelease(widget.index),
+      // fix bug
+      onVerticalDragStart: (_)=>_handleRelease(widget.index),
+      onHorizontalDragStart: (_)=>_handleRelease(widget.index),
       child: Container(
         padding: widget.padding,
         margin: widget.margin,
         alignment: Alignment.center,
         decoration: ShapeDecoration(
-          color: getColor(theme),
+          color: getColor(widget.theme),
           shape:
               widget.index != 18 ? const CircleBorder() : const StadiumBorder(),
-          shadows: listTap.contains(widget.index) || isPressed
+          shadows: listTap.contains(widget.index) || isPressed || widget.isFlat
               ? []
               : [
                   // Bottom Rigth Shadow
                   BoxShadow(
                     offset: const Offset(4, 4),
-                    color:
-                        theme.isDarkMode ? Colors.black : Colors.grey.shade500,
-                    blurRadius: 15,
+                    color: widget.theme!.isDarkMode
+                        ? Colors.black
+                        : Colors.grey.shade500,
+                    blurRadius: 10,
                     spreadRadius: 1,
                   ),
                   // Top Left Shadow
                   BoxShadow(
                     offset: const Offset(-4, -4),
-                    color:
-                        theme.isDarkMode ? Colors.grey.shade800 : Colors.white,
-                    blurRadius: 15,
+                    color: widget.theme!.isDarkMode
+                        ? Colors.grey.shade800
+                        : Colors.white,
+                    blurRadius: 10,
                     spreadRadius: 1,
                   ),
                 ],
