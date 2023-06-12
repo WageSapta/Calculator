@@ -2,7 +2,7 @@ import 'package:calculator/utils/state_utils.dart';
 import 'package:flutter/material.dart';
 
 class ThemeProvider with ChangeNotifier {
-  bool _isDarkMode = false;
+  bool _isDarkMode =  false ;
   ThemeData theme = ThemeData();
 
   bool get isDarkMode => _isDarkMode;
@@ -13,4 +13,5 @@ class ThemeProvider with ChangeNotifier {
     _isDarkMode = !_isDarkMode;
     notifyListeners();
   }
+  
 }

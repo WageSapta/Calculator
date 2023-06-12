@@ -33,7 +33,39 @@ class _AppsViewState extends State<AppsView> {
           itemBuilder: (BuildContext context, int index) {
             var item = provider.apps[index];
             return GestureDetector(
-              onTap: () {},
+              onTap: () => showModalBottomSheet(
+                isScrollControlled: true,
+                backgroundColor:
+                    isDarkMode ? MyColors.deepGrey : MyColors.primary,
+                shape: const RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(30))),
+                context: context,
+                builder: (_) => Padding(
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(_).viewInsets.bottom,
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(top: 10),
+                        width: 80,
+                        height: 5,
+                        decoration: ShapeDecoration(
+                          color:
+                              isDarkMode ? MyColors.primary : MyColors.deepGrey,
+                          shape: const StadiumBorder(),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: item['widget'],
+                      )
+                    ],
+                  ),
+                ),
+              ),
               child: Container(
                 color: Colors.transparent,
                 child: Column(
@@ -43,14 +75,13 @@ class _AppsViewState extends State<AppsView> {
                     Icon(
                       item['icon'],
                       size: 25,
-                      color: isDarkMode ? MyColors.primary : Colors.grey[800],
+                      color: isDarkMode ? MyColors.primary : Colors.grey[900],
                     ),
                     Text(
                       item['name'],
                       maxLines: 2,
                       style: TextStyle(
-                        color:
-                            isDarkMode ? MyColors.primary : Colors.grey[600],
+                        color: isDarkMode ? MyColors.primary : Colors.grey[700],
                       ),
                     ),
                   ],

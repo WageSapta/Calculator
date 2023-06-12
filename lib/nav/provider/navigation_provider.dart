@@ -3,12 +3,12 @@ import 'package:calculator/calculus/view/calculus_view.dart';
 import 'package:flutter/material.dart';
 
 class NavigationProvider extends ChangeNotifier {
+  final PageController _pageController = PageController(initialPage: 0);
+  int _currentPage = 0;
   List<Widget> pages = [
     const CalculusView(),
     const AppsView(),
   ];
-  final PageController _pageController = PageController(initialPage: 0);
-  int _currentPage = 0;
 
   PageController get pageController => _pageController;
   int get currentPage => _currentPage;

@@ -18,6 +18,14 @@ class CalculusView extends StatefulWidget {
 
 class _CalculusViewState extends State<CalculusView> {
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<CalculusProvider>(context, listen: false).getHistory();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Consumer2<ThemeProvider, CalculusProvider>(
       builder: (context, theme, calculus, child) {
@@ -66,9 +74,12 @@ class _CalculusViewState extends State<CalculusView> {
                                 children: calculus.history.map(
                                   (e) {
                                     return Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       crossAxisAlignment:
                                           CrossAxisAlignment.end,
                                       children: [
+                                        const SizedBox(height: 15),
                                         Text(
                                           e['input'],
                                           style: TextStyle(
@@ -87,7 +98,6 @@ class _CalculusViewState extends State<CalculusView> {
                                                 : Colors.black38,
                                           ),
                                         ),
-                                        const SizedBox(height: 15),
                                       ],
                                     );
                                   },
@@ -96,22 +106,20 @@ class _CalculusViewState extends State<CalculusView> {
                           SizedBox(
                             width: constraints.maxWidth,
                             child: Column(
-                              mainAxisSize: MainAxisSize.min,
                               mainAxisAlignment: MainAxisAlignment.end,
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 Visibility(
                                   visible: calculus.history.isNotEmpty,
-                                  child: const Divider(
-                                    height: 0,
-                                  ),
+                                  child: const Divider(height: 25),
                                 ),
                                 Visibility(
                                   visible: calculus.isTyping ||
                                       calculus.input != "0",
                                   child: const TextInput(),
                                 ),
-                                const TextResult()
+                                const TextResult(),
+                                const SizedBox(height: 10),
                               ],
                             ),
                           )
@@ -172,11 +180,9 @@ class _CalculusViewState extends State<CalculusView> {
                   case '=':
                     return MyButton(
                       theme: theme,
-                      bg: theme.isDarkMode
-                          ? MyColors.primary
-                          : Colors.grey[900],
+                      bg: Colors.amber[900],
                       textColor:
-                          theme.isDarkMode ? Colors.black : MyColors.primary,
+                          theme.isDarkMode ? MyColors.primary : Colors.black,
                       index: index,
                       fontSize: Get.width * 0.06,
                       buttonText: calculus.buttons[index],

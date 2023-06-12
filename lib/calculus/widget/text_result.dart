@@ -24,10 +24,10 @@ class TextResult extends StatelessWidget {
           // fontWeight: FontWeight.bold,
           color: theme.isDarkMode
               ? calculus.isTyping
-                  ? Colors.white38
+                  ? Colors.white70
                   : Colors.white
               : calculus.isTyping
-                  ? Colors.black38
+                  ? Colors.black87
                   : Colors.black,
         ),
       ),

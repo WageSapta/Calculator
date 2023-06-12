@@ -48,10 +48,16 @@ class MyTheme {
     brightness: Brightness.light,
     fontFamily: 'Poppins',
     scaffoldBackgroundColor: MyColors.primary,
+    textSelectionTheme: TextSelectionThemeData(
+      cursorColor: Colors.amber[900],
+    ),
   );
   static ThemeData darkTheme = ThemeData(
     brightness: Brightness.dark,
     fontFamily: 'Poppins',
     scaffoldBackgroundColor: Colors.grey[900],
+    textSelectionTheme: TextSelectionThemeData(
+      cursorColor: Colors.amber[900],
+    ),
   );
 }

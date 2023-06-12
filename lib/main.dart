@@ -1,4 +1,5 @@
 import 'package:calculator/apps/provider/apps_provider.dart';
+import 'package:calculator/bmi/provider/bmi_provider.dart';
 import 'package:calculator/calculus/provider/theme_provider.dart';
 import 'package:calculator/nav/provider/navigation_provider.dart';
 import 'package:calculator/splash_screen.dart';
@@ -22,11 +23,12 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => CalculusProvider()),
         ChangeNotifierProvider(create: (_) => AppsProvider()),
+        ChangeNotifierProvider(create: (_) => BmiProvider()),
       ],
       child: Consumer<ThemeProvider>(
         builder: (context, value, child) {
           return MaterialApp(
-            scrollBehavior: MyBehavior(), //
+            scrollBehavior: MyBehavior(),
             debugShowCheckedModeBanner: false,
             title: 'Calculator',
             navigatorKey: Get.navigatorKey,
@@ -41,11 +43,11 @@ class MyApp extends StatelessWidget {
 
 class MyBehavior extends ScrollBehavior {
   @override
-  Widget buildOverscrollIndicator(BuildContext context, Widget child,ScrollableDetails details) {
+  Widget buildOverscrollIndicator(
+      BuildContext context, Widget child, ScrollableDetails details) {
     return child;
   }
 
-  @override
   Color? getScrollColor(BuildContext context) {
     return null;
   }

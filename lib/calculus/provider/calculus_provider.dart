@@ -4,6 +4,8 @@ import 'package:math_expressions/math_expressions.dart';
 import '../../utils/shared_history.dart';
 
 class CalculusProvider extends ChangeNotifier {
+
+
   bool _isTyping = false;
   bool _isResult = false;
   String _input = "0";
@@ -66,7 +68,7 @@ class CalculusProvider extends ChangeNotifier {
   }
 
   set input(String val) {
-   if (numeric.contains(val) && _input == "0") {
+    if (numeric.contains(val) && _input == "0") {
       if (val != "0") {
         _isTyping = true;
         _input = val;

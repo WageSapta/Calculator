@@ -11,6 +11,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+
   Future loading() async {
     await Future.delayed(const Duration(seconds: 1), () {
       return Get.offAll(const NavigationView());

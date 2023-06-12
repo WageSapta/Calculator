@@ -131,7 +131,7 @@ class _MyButtonState extends State<MyButton> {
                 style: TextStyle(
                   color: widget.textColor,
                   fontSize: widget.fontSize,
-                  fontWeight: FontWeight.bold,
+                  // fontWeight: FontWeight.bold,
                 ),
               ),
       ),

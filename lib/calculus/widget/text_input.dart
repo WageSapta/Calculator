@@ -25,10 +25,10 @@ class TextInput extends StatelessWidget {
           color: theme.isDarkMode
               ? calculus.isTyping
                   ? Colors.white
-                  : Colors.white38
+                  : Colors.white70
               : calculus.isTyping
                   ? Colors.black
-                  : Colors.black38,
+                  : Colors.black87,
         ),
       ),
     );
