@@ -1,6 +1,6 @@
-import 'package:calculator/bmi/provider/bmi_provider.dart';
+import 'package:calculator/apps/widgets/bmi/provider/bmi_provider.dart';
+import 'package:calculator/apps/widgets/text_field.dart';
 import 'package:calculator/calculus/provider/theme_provider.dart';
-import 'package:calculator/utils/color.dart';
 import 'package:calculator/utils/state_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -27,36 +27,16 @@ class _BmiViewState extends State<BmiView> {
           ),
         ),
         const SizedBox(height: 10.0),
-        TextField(
+        MyTextField(
+          isDark: isDark,
           controller: provider.heightController,
-          keyboardType: TextInputType.number,
-          decoration: InputDecoration(
-            hintText: 'Height (cm)',
-            border: const OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(15)),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                  color: isDark ? MyColors.primary : MyColors.deepGrey),
-              borderRadius: BorderRadius.circular(15),
-            ),
-          ),
+          hintText: 'Height (cm)',
         ),
         const SizedBox(height: 10.0),
-        TextField(
+        MyTextField(
+          isDark: isDark,
           controller: provider.weightController,
-          keyboardType: TextInputType.number,
-          decoration: InputDecoration(
-            hintText: 'Weight (kg)',
-            border: const OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(15)),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                  color: isDark ? MyColors.primary : MyColors.deepGrey),
-              borderRadius: BorderRadius.circular(15),
-            ),
-          ),
+          hintText: 'Weight (kg)',
         ),
         const SizedBox(height: 20.0),
         SizedBox(

@@ -1,6 +1,7 @@
 import 'package:calculator/apps/provider/apps_provider.dart';
-import 'package:calculator/bmi/provider/bmi_provider.dart';
+import 'package:calculator/apps/widgets/bmi/provider/bmi_provider.dart';
 import 'package:calculator/calculus/provider/theme_provider.dart';
+import 'package:calculator/apps/widgets/massa/provider/massa_provider.dart';
 import 'package:calculator/nav/provider/navigation_provider.dart';
 import 'package:calculator/splash_screen.dart';
 import 'package:provider/provider.dart';
@@ -24,6 +25,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => CalculusProvider()),
         ChangeNotifierProvider(create: (_) => AppsProvider()),
         ChangeNotifierProvider(create: (_) => BmiProvider()),
+        ChangeNotifierProvider(create: (_) => MassaProvider()),
       ],
       child: Consumer<ThemeProvider>(
         builder: (context, value, child) {

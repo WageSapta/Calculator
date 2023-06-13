@@ -3,7 +3,6 @@ import 'package:calculator/calculus/widget/mybutton.dart';
 import 'package:calculator/nav/provider/navigation_provider.dart';
 import 'package:calculator/utils/state_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
 import 'package:provider/provider.dart';
 
 class NavigationView extends StatefulWidget {
